@@ -1,0 +1,16 @@
+C:\Users\Serge\Documents\Visual Studio 2010\Projects\Games\Quizgame\User\User\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Serge\Documents\Visual Studio 2010\Projects\Games\Quizgame\User\User\obj\x86\Debug\User.Form1.resources
+C:\Users\Serge\Documents\Visual Studio 2010\Projects\Games\Quizgame\User\User\obj\x86\Debug\User.Properties.Resources.resources
+C:\Users\Serge\Documents\Visual Studio 2010\Projects\Games\Quizgame\User\User\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\Serge\Documents\Visual Studio 2010\Projects\Games\Quizgame\User\User\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\Serge\Documents\Visual Studio 2010\Projects\Games\Quizgame\User\User\bin\Debug\User.exe
+C:\Users\Serge\Documents\Visual Studio 2010\Projects\Games\Quizgame\User\User\bin\Debug\User.pdb
+C:\Users\Serge\Documents\Visual Studio 2010\Projects\Games\Quizgame\User\User\obj\x86\Debug\User.exe
+C:\Users\Serge\Documents\Visual Studio 2010\Projects\Games\Quizgame\User\User\obj\x86\Debug\User.pdb
+C:\Users\ACER\Documents\Visual Studio 2010\Projects\Games\Quizgame\User\User\obj\x86\Debug\User.exe
+C:\Users\ACER\Documents\Visual Studio 2010\Projects\Games\Quizgame\User\User\obj\x86\Debug\User.pdb
+C:\Users\ACER\Documents\Visual Studio 2010\Projects\Games\Quizgame\User\User\bin\Debug\User.exe
+C:\Users\ACER\Documents\Visual Studio 2010\Projects\Games\Quizgame\User\User\bin\Debug\User.pdb
+C:\Users\ACER\Documents\Visual Studio 2010\Projects\Games\Quizgame\User\User\obj\x86\Debug\User.Form1.resources
+C:\Users\ACER\Documents\Visual Studio 2010\Projects\Games\Quizgame\User\User\obj\x86\Debug\User.Properties.Resources.resources
+C:\Users\ACER\Documents\Visual Studio 2010\Projects\Games\Quizgame\User\User\obj\x86\Debug\User.csproj.GenerateResource.Cache

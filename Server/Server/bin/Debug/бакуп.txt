@@ -1,0 +1,214 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading;
+
+
+namespace Server
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+        GameMaster gm;
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+
+        }
+
+        public string data = null;
+
+        void SetTextSafe(string newText)
+        {
+            if (label3.InvokeRequired) label3.Invoke(new Action<string>((s) => label3.Text = s), newText);
+            else label3.Text = newText;
+        }
+
+        private delegate void FillGridDelegate(); 
+
+        public void StartListening()
+        {
+            string result;
+            // Data buffer for incoming data.
+            byte[] bytes = new Byte[1024];
+
+            // Establish the local endpoint for the socket.
+            // Dns.GetHostName returns the name of the 
+            // host running the application.
+            IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
+            IPAddress ipAddress = ipHostInfo.AddressList[0];
+            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);
+
+            // Create a TCP/IP socket.
+            Socket listener = new Socket(AddressFamily.InterNetwork,
+                SocketType.Stream, ProtocolType.Tcp);
+
+            // Bind the socket to the local endpoint and 
+            // listen for incoming connections.
+            try
+            {
+                listener.Bind(localEndPoint);
+                listener.Listen(1);
+
+                // Start listening for connections.
+                while (true)
+                {
+                    SetTextSafe("Waiting for a connection...");
+                    // Program is suspended while waiting for an incoming connection.
+                    Socket handler = listener.Accept();
+                    data = null;
+
+                    // An incoming connection needs to be processed.
+
+                    bytes = new byte[1024];
+                    int bytesRec = handler.Receive(bytes);
+                    data += Encoding.ASCII.GetString(bytes, 0, bytesRec);
+
+
+                    // Show the data on the console.
+
+                    result = gm.ProcessIncomingInfo(data);
+
+                    FillGridDelegate FillD = new FillGridDelegate(FreshUpTheScoreboard); // создаем делегат с указателем на нужную функцию
+                    if (this.InvokeRequired) this.BeginInvoke(FillD); // выполняем ее в том потоке где был создан элемент
+
+                    // Echo the data back to the client.
+                    byte[] msg = Encoding.ASCII.GetBytes(result);
+
+                    handler.Send(msg);
+                    handler.Shutdown(SocketShutdown.Both);
+                    handler.Close();
+
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            gm = new GameMaster(2, "questions.txt");
+            Thread th = new Thread(new ThreadStart(StartListening));
+            th.Start();
+            
+        }
+
+        void FreshUpTheScoreboard()
+        {
+            dataGridView1.Rows.Clear();
+            foreach (Player p in gm.Players)
+            {
+                dataGridView1.Rows.Add(p.Name, p.Score);
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public void StartClient() 
+        {
+            // Data buffer for incoming data.
+            byte[] bytes = new byte[1024];
+            byte[] msg = Encoding.ASCII.GetBytes("Username*" + username);
+            // Connect to a remote device.
+            try {
+                // Establish the remote endpoint for the socket.
+                // This example uses port 11000 on the local computer.
+                IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
+                IPAddress ipAddress = ipHostInfo.AddressList[0];
+                IPEndPoint remoteEP = new IPEndPoint(ipAddress,11000);
+
+                // Create a TCP/IP  socket.
+                Socket sender = new Socket(AddressFamily.InterNetwork, 
+                    SocketType.Stream, ProtocolType.Tcp );
+
+                // Connect the socket to the remote endpoint. Catch any errors.
+                try {
+                    sender.Connect(remoteEP);
+
+                    label1.Text=("Socket connected to "+
+                        sender.RemoteEndPoint.ToString());
+
+                    // Encode the data string into a byte array.
+                    
+
+                    // Send the data through the socket.
+                    int bytesSent = sender.Send(msg);
+
+                    // Receive the response from the remote device.
+                    int bytesRec = sender.Receive(bytes);
+                    string incoming = (Encoding.ASCII.GetString(bytes,0,bytesRec));
+                    ProcessIncoming(incoming);
+
+                    // Release the socket.
+                    sender.Shutdown(SocketShutdown.Both);
+                    sender.Close();
+                
+                } catch (ArgumentNullException ane) {
+                    MessageBox.Show("ArgumentNullException : {0}",ane.ToString());
+                } catch (SocketException se) {
+                    MessageBox.Show("SocketException : {0}",se.ToString());
+                } catch (Exception e) {
+                    MessageBox.Show("Unexpected exception : {0}", e.ToString());
+                }
+
+            } catch (Exception e) 
+                {
+                   MessageBox.Show(e.ToString());
+                }
+        }
+
+        string ProcessIncoming(string s)
+        {
+            if (s == "Ok")
+            {
+                button1.Enabled = false;
+                textBox1.Enabled = false;
+            }
+            return "ok";
+        }
+    }
+}
+
